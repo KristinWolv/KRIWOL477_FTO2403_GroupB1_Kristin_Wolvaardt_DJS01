@@ -47,12 +47,12 @@ const validateParams = ({ vel, acc, time, d, fuel, fbr }) => {
 // Velosity
 const calcNewVel = (vel, acc, time) => {
   acc = convertAccToKmPerHourSquared(acc); // Converts acc to km/h^2
-  return vel + (acc * (time / 3600)); //Calculate the new vel, converting time into hours
+  return vel + (acc * (time / 3600)); // calculate the new vel, converting time into hours
 };
 
 //distance
 const calcNewDist = (vel, time, d) => {
-  return d + (vel * (time / 3600));
+  return d + (vel * (time / 3600)); // calculate the new dist, converting time into hours
 };
 
 // fuel
@@ -69,8 +69,6 @@ const rf = calcRemainingFuel(fuel, fbr, time);
 console.log(`Corrected New Velocity: ${vel2.toFixed(2)} km/h`);
 console.log(`Corrected New Distance: ${d2.toFixed(2)} km`);
 console.log(`Corrected Remaining Fuel: ${rf.toFixed(2)} kg`);
-
-// FULL CODE EXPLANATION IN README
 
 
 
