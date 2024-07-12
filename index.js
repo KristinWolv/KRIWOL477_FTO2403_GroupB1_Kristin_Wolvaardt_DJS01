@@ -13,19 +13,64 @@ const d = 0; // distance (km)
 const fuel = 5000; // remaining fuel (kg)
 const fbr = 0.5; // fuel burn rate (kg/s)
 
-
-const d2 = d + (vel*time) //calcultes new distance
-const rf = fbr*time //calculates remaining fuel
-const vel2 = calcNewVel(acc, vel, time) //calculates new velocity based on acceleration
-
-// Pick up an error with how the function below is called and make it robust to such errors
-calcNewVel = (vel, acc, time) => { 
-  return vel + (acc*time)
+// Unit conversion function
+const convertAccToKmPerHourSquared = (acc) => {
+  if (typeof acc !== 'number' || acc < 0) {
+    throw new Error("Acceleration must be a postive number in m/s^2.");
+  }
+  return acc * 12960; // 1 m/s^2 = 12960 km/h^2
 }
 
-console.log(`Corrected New Velocity: ${vel2} km/h`);
-console.log(`Corrected New Distance: ${d2} km`);
-console.log(`Corrected Remaining Fuel: ${rf} kg`);
+// Validation Function (catching errors)
+const validateParams = ({ vel, acc, time, d, fuel, fbr }) => {
+  if (typeof vel !== 'number' || vel < 0) {
+    throw new Error("Velocity must be a positive number in km/h.");
+  }
+  if (typeof acc !== 'number' || acc < 0) {
+    throw new Error("Acceleration must be a positive number in m/s^2.");
+  }
+  if (typeof time !== 'number' || time < 0) {
+    throw new Error("Time must be a positive number in seconds.");
+  }
+  if (typeof d !== 'number' || d < 0) {
+    throw new Error("Distance must be a positive number in km.");
+  }
+  if (typeof fuel !== 'number' || fuel < 0) {
+    throw new Error("Fuel must be a positive number in kg.");
+  }
+  if (typeof fbr !== 'number' || fbr < 0) {
+    throw new Error("Fuel burnout must be a positive number in kg/s.");
+  }
+};
+
+// Calculation function
+// Velosity
+const calcNewVel = (vel, acc, time) => {
+  acc = convertAccToKmPerHourSquared(acc); // Converts acc to km/h^2
+  return vel + (acc * (time / 3600)); //Calculate the new vel, converting time into hours
+};
+
+//distance
+const calcNewDist = (vel, time, d) => {
+  return d + (vel * (time / 3600));
+};
+
+// fuel
+const calcRemainingFuel = (fuel, fbr, time) => {
+  return fuel - (fbr * time); // calculates remaining fuel
+};
+
+
+// calc new values
+const vel2 = calcNewVel(vel, acc, time);
+const d2 = calcNewDist(vel, time, d);
+const rf = calcRemainingFuel(fuel, fbr, time);
+
+console.log(`Corrected New Velocity: ${vel2.toFixed(2)} km/h`);
+console.log(`Corrected New Distance: ${d2.toFixed(2)} km`);
+console.log(`Corrected Remaining Fuel: ${rf.toFixed(2)} kg`);
+
+// FULL CODE EXPLANATION IN README
 
 
 
